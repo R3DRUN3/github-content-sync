@@ -12,15 +12,22 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 4 {
-		fmt.Println("Usage: github-content-sync <repo-url> <folder1> <folder2>")
+
+	err := checkEnvVariables()
+	if err != nil {
+		fmt.Println(err)
+		// Handle the error, e.g., exit the program or take appropriate action.
 		return
 	}
 
-	repoURL := os.Args[1]
-	folder1 := os.Args[2]
-	folder2 := os.Args[3]
-	token := os.Getenv("GITHUB_TOKEN") // Read Github token form env variable
+	// All required environment variables are present, continue with your program logic.
+	fmt.Println("All environment variables are present.")
+
+	// Read args from env vars
+	repoURL := os.Getenv("REPO_URL")
+	folder1 := os.Getenv("REPO_FOLDER_1")
+	folder2 := os.Getenv("REPO_FOLDER_2")
+	token := os.Getenv("GITHUB_TOKEN")
 
 	client := createGitHubClient(token)
 
@@ -58,6 +65,18 @@ func main() {
 	// 	compareLastUpdate(client, repoURL, folder2, folder1)
 	// }()
 	// wg.Wait()
+}
+
+func checkEnvVariables() error {
+	requiredEnvVars := []string{"REPO_URL", "REPO_FOLDER_1", "REPO_FOLDER_2", "GITHUB_TOKEN"}
+
+	for _, envVar := range requiredEnvVars {
+		if value, exists := os.LookupEnv(envVar); !exists || value == "" {
+			return fmt.Errorf("missing environment variable: %s", envVar)
+		}
+	}
+
+	return nil
 }
 
 func createGitHubClient(token string) *github.Client {
