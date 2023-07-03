@@ -138,6 +138,7 @@ The script uses the following external dependencies:
 Please refer to the [Go documentation](https://golang.org/doc/)  for instructions on how to install and manage dependencies.
 ## License
 
-This script is released under the [MIT License](https://chat.openai.com/LICENSE) . Feel free to modify and distribute it as per your needs.---
+This script is released under the [MIT License](https://chat.openai.com/LICENSE).  
+Feel free to modify and distribute it as per your needs.  
 
-Feel free to customize this README file based on your specific requirements and add any additional sections or information that you think would be helpful for your users.
+
