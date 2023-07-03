@@ -1,4 +1,5 @@
 # github-content-sync 🔎 📁
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/r3drun3/github-content-sync)](https://goreportcard.com/report/github.com/r3drun3/github-content-sync)  
 
 The *Github Content Sync* tool is a command-line script written in *Go* that allows you to compare the contents of two folders in a GitHub repository. 
