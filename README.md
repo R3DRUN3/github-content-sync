@@ -1,4 +1,4 @@
-# github-content-sync
+# github-content-sync 🔎 📁
 The *Github Content Sync* tool is a command-line script written in *Go* that allows you to compare the contents of two folders in a GitHub repository. 
 It helps identify files that are present in one folder but not in another, as well as files that have newer commits in one folder compared to another.
 ## Purpose
