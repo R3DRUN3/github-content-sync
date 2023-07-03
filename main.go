@@ -41,30 +41,15 @@ func main() {
 		fmt.Println(*file.Name)
 	}
 
-	// Check for files in folder1 with newer last update than folder2
-	// fmt.Println("\nFiles in", folder1, "with newer last update than", folder2)
-	// updatedFiles, err := compareLastUpdate(client, repoURL, folder1, folder2)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// for _, file := range updatedFiles {
-	// 	fmt.Println(*file.Name)
-	// }
-
-	// // Parallelize the execution of comparing last update
-	// var wg sync.WaitGroup
-	// wg.Add(2)
-	// go func() {
-	// 	defer wg.Done()
-	// 	// Compare folder1 -> folder2
-	// 	compareLastUpdate(client, repoURL, folder1, folder2)
-	// }()
-	// go func() {
-	// 	defer wg.Done()
-	// 	// Compare folder2 -> folder1
-	// 	compareLastUpdate(client, repoURL, folder2, folder1)
-	// }()
-	// wg.Wait()
+	// Check for files present in both folder1 and folder2
+	fmt.Println("\n\nFiles present in both", folder1, "and", folder2, "with newer commits in", folder1)
+	newerFiles, err := getFilesWithNewerCommit(client, repoURL, folder1, folder2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, file := range newerFiles {
+		fmt.Println(*file.Name)
+	}
 }
 
 func checkEnvVariables() error {
@@ -122,50 +107,57 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 	return diffFiles, nil
 }
 
-// func compareLastUpdate(client *github.Client, repoURL, folder1, folder2 string) ([]*github.RepositoryContent, error) {
-// 	// Extract owner and repo name from the repo URL
-// 	owner, repo := parseRepoURL(repoURL)
+func getFilesWithNewerCommit(client *github.Client, repoURL, folder1, folder2 string) ([]*github.RepositoryContent, error) {
+	// Extract owner and repo name from the repo URL
+	owner, repo := parseRepoURL(repoURL)
 
-// 	// List commits in the repository
-// 	commits, _, err := client.Repositories.ListCommits(context.Background(), owner, repo, nil)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	// List files in folder1
+	_, folder1Files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, folder1, nil)
+	if err != nil {
+		return nil, err
+	}
 
-// 	// Retrieve the commit history for each file in folder1
-// 	commitHistory := make(map[string]time.Time)
-// 	for _, commit := range commits {
-// 		files, _, _, err := client.Repositories.ListFiles(context.Background(), owner, repo, *commit.SHA, nil)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		for _, file := range files {
-// 			if strings.HasPrefix(*file.Path, folder1) {
-// 				if lastUpdate, ok := commitHistory[*file.Path]; !ok || lastUpdate.Before(*commit.Commit.Author.Date) {
-// 					commitHistory[*file.Path] = *commit.Commit.Author.Date
-// 				}
-// 			}
-// 		}
-// 	}
+	// List files in folder2
+	_, folder2Files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, folder2, nil)
+	if err != nil {
+		return nil, err
+	}
 
-// 	// List files in folder2
-// 	_, folder2Files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, folder2, nil)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	// Find files present in both folder1 and folder2 with newer commits in folder1
+	newerFiles := make([]*github.RepositoryContent, 0)
+	for _, file1 := range folder1Files {
+		for _, file2 := range folder2Files {
+			if *file1.Name == *file2.Name {
+				// Check if the file in folder1 has a newer commit than the file in folder2
+				commit1, err := getFileLastCommit(client, owner, repo, folder1, *file1.Name)
+				if err != nil {
+					return nil, err
+				}
+				commit2, err := getFileLastCommit(client, owner, repo, folder2, *file2.Name)
+				if err != nil {
+					return nil, err
+				}
+				if commit1 != nil && commit2 != nil && commit1.GetCommit().GetCommitter().GetDate().Time.After(commit2.GetCommit().GetCommitter().GetDate().Time) {
+					newerFiles = append(newerFiles, file1)
+				}
+				break
+			}
+		}
+	}
 
-// 	// Find files in folder1 with newer last update than folder2
-// 	updatedFiles := make([]*github.RepositoryContent, 0)
-// 	for _, file := range folder2Files {
-// 		if lastUpdate, ok := commitHistory[*file.Path]; ok {
-// 			if lastUpdate.After(file.GetCommit().GetCommit().Author.GetDate().Time) {
-// 				updatedFiles = append(updatedFiles, file)
-// 			}
-// 		}
-// 	}
+	return newerFiles, nil
+}
 
-// 	return updatedFiles, nil
-// }
+func getFileLastCommit(client *github.Client, owner, repo, path, file string) (*github.RepositoryCommit, error) {
+	commits, _, err := client.Repositories.ListCommits(context.Background(), owner, repo, &github.CommitsListOptions{Path: path + "/" + file})
+	if err != nil {
+		return nil, err
+	}
+	if len(commits) > 0 {
+		return commits[0], nil
+	}
+	return nil, nil
+}
 
 func parseRepoURL(repoURL string) (string, string) {
 	parts := strings.Split(repoURL, "/")
