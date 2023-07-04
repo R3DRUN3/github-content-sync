@@ -6,8 +6,9 @@ The *Github Content Sync* tool is a command-line script written in *Go* that all
 It helps identify files that are present in one folder but not in another, as well as files that have newer commits in one folder compared to another.  
 ## Purpose
 
-The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository, expecially for those repo that contain documentation in various languages (divided into different folders).  
-It can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
+The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
+This was specifically meant for those repo that contain documentation in various languages (divided into different folders) and you need a fast way to know the deltas.  
+Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
 ## Arguments
 
 The script requires the following environment variables to be set: 
@@ -19,11 +20,12 @@ The script requires the following environment variables to be set:
 
 The script performs the following steps:
 1. Checks the presence of the required environment variables and their values.
-2. Creates a GitHub client using the provided access token.
-3. Compares the contents of the two specified folders within the repository.
-4. Prints the files that are present in the first folder but not in the second folder.
-5. Retrieves files that exist in both folders and have newer commits in the first folder.
-6. Prints the files with newer commits in the first folder compared to the second folder.
+1. Creates a GitHub client using the provided access token.
+1. Retrieve the content of the two specified folders via the Github client object.
+1. Compares the contents of the two specified folders within the repository.
+1. Retrieves files that exist in both folders and have newer commits in the first folder.
+1. Prints the files that are present in the first folder but not in the second folder.
+1. Prints the files with newer commits in the first folder compared to the same files in the second folder.
 ## Examples
 
 Here are some examples of how to use the Folder Comparison Tool:
