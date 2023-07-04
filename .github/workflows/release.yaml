@@ -1,0 +1,32 @@
+name: build release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+
+      - name: Build Release
+        run: go build -o myapp
+
+      - name: Publish Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.repository.releases_url }}
+          asset_path: ./myapp
+          asset_name: myapp
+          asset_content_type: application/octet-stream
