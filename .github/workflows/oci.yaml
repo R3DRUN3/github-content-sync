@@ -16,11 +16,11 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.x
+          go-version: '1.20'
 
       - name: Build the OCI Image
         run: docker build -t ghcr.io/${{ github.repository }}:${{ github.ref }} .
-        working-directory: /path/to/your/app # Replace this with the actual path to your app's directory containing the Dockerfile
+        working-directory: / # Replace this with the actual path to your app's directory containing the Dockerfile
 
       - name: Login to GitHub Packages
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
