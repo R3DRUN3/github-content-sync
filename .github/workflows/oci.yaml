@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-publish-oci:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - name: Checkout Repository
