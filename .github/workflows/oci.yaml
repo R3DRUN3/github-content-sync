@@ -1,0 +1,29 @@
+name: oci
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-publish-oci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.x
+
+      - name: Build the OCI Image
+        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.ref }} .
+        working-directory: /path/to/your/app # Replace this with the actual path to your app's directory containing the Dockerfile
+
+      - name: Login to GitHub Packages
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push the OCI Image
+        run: docker push ghcr.io/${{ github.repository }}:${{ github.ref }}
