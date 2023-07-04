@@ -47,6 +47,7 @@ go run main.go
 
 Output:
 ```console
+#################### [GITHUB CONTENT SYNC] ####################
 All environment variables are present.
 
 [Files present in content/en but not in content/it ====>]
@@ -129,6 +130,8 @@ style-guide
 tightly-coupled-architectures.md
 version-control.md
 virtual-machine.md
+
+###############################################################
 ```  
 
 ## With Docker (Local Build)
