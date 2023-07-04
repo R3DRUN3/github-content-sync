@@ -11,12 +11,15 @@ import (
 	"sync"
 
 	// Third-party packages
+	"github.com/common-nighthawk/go-figure"
 	"github.com/google/go-github/v53/github"
 	"golang.org/x/oauth2"
 )
 
 func main() {
-	fmt.Println("\n#################### [GITHUB CONTENT SYNC] ####################")
+	//fmt.Println("\n#################### [GITHUB CONTENT SYNC] ####################")
+	header := figure.NewFigure("GITHUB CONTENT SYNC", "eftitalic", true)
+	header.Print()
 	envVars, err := getEnvVariables()
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -32,7 +35,7 @@ func main() {
 	// Create a GitHub client with the provided token
 	client := createGitHubClient(token)
 
-	fmt.Println("\n[Files present in", folder1, "but not in", folder2, "====>]")
+	fmt.Println("\n[ FILES PRESENT IN", folder1, "BUT NOT IN", folder2, "]")
 	// Compare folders and get files present in folder1 but not in folder2
 	diffFiles, newerFiles, err := compareFolders(client, repoURL, folder1, folder2)
 	if err != nil {
@@ -40,10 +43,12 @@ func main() {
 	}
 	printFilesSorted(diffFiles)
 
-	fmt.Println("\n\n[Files present in both", folder1, "and", folder2, "with newer commits in", folder1, "====>]")
+	fmt.Println("\n\n[ FILES PRESENT IN BOTH", folder1, "AND", folder2, "WITH NEWER COMMITS IN", folder1, "]")
 	// Print files present in both folder1 and folder2 with newer commits in folder1
 	printFilesSorted(newerFiles)
-	fmt.Println("\n###############################################################")
+	footer := figure.NewFigure("----------------------------", "eftitalic", true)
+	footer.Print()
+	fmt.Println()
 }
 
 // Check if all required environment variables are set and return the list of values
@@ -53,13 +58,13 @@ func getEnvVariables() ([]string, error) {
 
 	for i, envVar := range requiredEnvVars {
 		if value, exists := os.LookupEnv(envVar); !exists || value == "" {
-			return nil, fmt.Errorf("missing environment variable: %s", envVar)
+			return nil, fmt.Errorf("missing environment variable ===> %s", envVar)
 		} else {
 			envVarValues[i] = value
 		}
 	}
 
-	fmt.Println("All environment variables are present.")
+	fmt.Println("\n[ ALL ENVIRONMENT VARIABLES ARE CONFIGURED ]")
 	return envVarValues, nil
 }
 

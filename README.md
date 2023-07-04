@@ -48,10 +48,14 @@ export GITHUB_TOKEN=your-github-token
 
 Output:
 ```console
-#################### [GITHUB CONTENT SYNC] ####################
-All environment variables are present.
+   __   __ _____   _ __  _ __   ___      __   _    _  __ _____   ___   _  __ _____      ___  _  __   _  __   __
+ ,'_/  / //_  _/  /// / /// /  / o.)   ,'_/ ,' \  / |/ //_  _/  / _/  / |/ //_  _/    ,' _/ | |/,'  / |/ / ,'_/
+/ /_n / /  / /   / ` / / U /  / o \   / /_ / o | / || /  / /   / _/  / || /  / /     _\ `.  | ,'   / || / / /_
+|__,'/_/  /_/   /_n_/  \_,'  /___,'   |__/ |_,' /_/|_/  /_/   /___/ /_/|_/  /_/     /___,' /_/    /_/|_/  |__/
 
-[Files present in content/en but not in content/it ====>]
+[ ALL ENVIRONMENT VARIABLES ARE CONFIGURED ]
+
+[ FILES PRESENT IN content/en BUT NOT IN content/it ]
 _TEMPLATE.md
 application-programming-interface.md
 auto-scaling.md
@@ -85,8 +89,6 @@ mutual-transport-layer-security.md
 pod.md
 policy-as-code.md
 role-based-access-control.md
-search.md
-security-chaos-engineering.md
 serverless.md
 service-discovery.md
 service-proxy.md
@@ -97,7 +99,7 @@ virtualization.md
 zero-trust-architecture.md
 
 
-[Files present in both content/en and content/it with newer commits in content/en ====>]
+[ FILES PRESENT IN BOTH content/en AND content/it WITH NEWER COMMITS IN content/en ]
 _index.md
 abstraction.md
 agile-software-development.md
@@ -132,7 +134,9 @@ tightly-coupled-architectures.md
 version-control.md
 virtual-machine.md
 
-###############################################################
+
+ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___
+/__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__/
 ```  
 
 ## With Docker (Local Build)
@@ -162,14 +166,6 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 
 
 
-
-
-## Dependencies
-
-The script uses the following external dependencies: 
-- [go-github](https://github.com/google/go-github) : A Go library for accessing the GitHub API.
-
-Please refer to the [Go documentation](https://golang.org/doc/)  for instructions on how to install and manage dependencies.
 ## License
 
 This script is released under the [MIT License](https://chat.openai.com/LICENSE).  
