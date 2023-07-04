@@ -138,12 +138,25 @@ virtual-machine.md
 This repo also contain a Dockerfile so you can launch the script as a docker container.  
 buil the image:  
 ```console
-docker build -t github-content-sync:v1 .
+docker build -t github-content-sync:latest .
 ```  
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> github-content-sync:v1
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> github-content-sync:latest
+```  
+
+
+## With Docker (Github Packages)
+Alternatively, this repo already contains an action to publish the script's OCI image to [Github Packages](https://github.com/features/packages).  
+Pull the version that you want: 
+```console
+docker pull ghcr.io/r3drun3/github-content-sync:1.1.5 
+```  
+
+Run the docker container (change env vars accordingly):  
+```console
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.1.5
 ```  
 
 
