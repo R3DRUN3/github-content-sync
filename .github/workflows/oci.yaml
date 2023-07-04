@@ -32,11 +32,10 @@ jobs:
           echo ${{steps.tagger.outputs.version-without-v}}
 
       - name: Build the OCI Image
-        run: docker build -t ghcr.io/${{ github.repository }}:${{steps.tagger.outputs.version-without-v}} .
-        working-directory: / # Replace this with the actual path to your app's directory containing the Dockerfile
-
+        run: docker build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }} .
+        working-directory: /
       - name: Login to GitHub Packages
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push the OCI Image
-        run: docker push ghcr.io/${{ github.repository }}:${{steps.tagger.outputs.version-without-v}}
+        run: docker push ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}
