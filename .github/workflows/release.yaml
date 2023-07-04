@@ -4,11 +4,6 @@ on:
   push:
     tags:
       - 'v*.*.*'
-    paths-ignore:
-      - 'README.md'
-      - '.gitignore'
-      - 'Dockerfile'
-      - 'LICENSE'
 
 permissions:
   contents: write

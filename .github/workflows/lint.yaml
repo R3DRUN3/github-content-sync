@@ -4,6 +4,9 @@ on:
   push:
     paths-ignore:
       - 'README.md'
+      - '.gitignore'
+      - 'Dockerfile'
+      - 'LICENSE'
 
 jobs:
   lint:
