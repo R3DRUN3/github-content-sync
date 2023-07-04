@@ -2,11 +2,12 @@ name: lint
 
 on:
   push:
-    paths-ignore:
-      - 'README.md'
-      - '.gitignore'
-      - 'Dockerfile'
-      - 'LICENSE'
+    paths:
+      - '**'
+      - '!README.md'
+      - '!**/.gitignore'
+      - '!**/Dockerfile'
+      - '!**/LICENSE'
 
 jobs:
   lint:
