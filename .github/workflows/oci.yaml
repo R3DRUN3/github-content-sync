@@ -33,7 +33,7 @@ jobs:
 
       - name: Build the OCI Image
         run: docker build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }} .
-        working-directory: /
+        working-directory: .
       - name: Login to GitHub Packages
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
