@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 
@@ -36,9 +37,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, file := range diffFiles {
-		fmt.Println(*file.Name)
-	}
+	printFilesSorted(diffFiles)
 
 	fmt.Println("\n\n[Files present in both", folder1, "and", folder2, "with newer commits in", folder1, "====>]")
 	// Get files present in both folder1 and folder2 with newer commits in folder1
@@ -46,9 +45,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, file := range newerFiles {
-		fmt.Println(*file.Name)
-	}
+	printFilesSorted(newerFiles)
 }
 
 // Check if all required environment variables are set and return the list of values
@@ -211,4 +208,17 @@ func parseRepoURL(repoURL string) (string, string) {
 	repo := parts[len(parts)-1]
 	repo = strings.TrimSuffix(repo, ".git")
 	return owner, repo
+}
+
+// Print the files in lexicographic order
+func printFilesSorted(files []*github.RepositoryContent) {
+	// Sort files by their names
+	sort.Slice(files, func(i, j int) bool {
+		return *files[i].Name < *files[j].Name
+	})
+
+	// Print the sorted file names
+	for _, file := range files {
+		fmt.Println(*file.Name)
+	}
 }
