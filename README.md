@@ -1,4 +1,4 @@
-# github-content-sync 🔎 📁
+# GITHUB CONTENT SYNC 🔎 📁
 [![lint](https://github.com/R3DRUN3/github-content-sync/actions/workflows/lint.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/lint.yaml)
 [![goreleaser](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml)
 [![oci](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml)
