@@ -15,19 +15,17 @@ import (
 )
 
 func main() {
-	err := checkEnvVariables()
+	envVars, err := getEnvVariables()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error:", err)
 		return
 	}
 
-	fmt.Println("All environment variables are present.")
-
 	// Read environment variables
-	repoURL := os.Getenv("REPO_URL")
-	folder1 := os.Getenv("REPO_FOLDER_1")
-	folder2 := os.Getenv("REPO_FOLDER_2")
-	token := os.Getenv("GITHUB_TOKEN")
+	repoURL := envVars[0]
+	folder1 := envVars[1]
+	folder2 := envVars[2]
+	token := envVars[3]
 
 	// Create a GitHub client with the provided token
 	client := createGitHubClient(token)
@@ -53,17 +51,21 @@ func main() {
 	}
 }
 
-// Check if all required environment variables are set
-func checkEnvVariables() error {
+// Check if all required environment variables are set and return the list of values
+func getEnvVariables() ([]string, error) {
 	requiredEnvVars := []string{"REPO_URL", "REPO_FOLDER_1", "REPO_FOLDER_2", "GITHUB_TOKEN"}
+	envVarValues := make([]string, len(requiredEnvVars))
 
-	for _, envVar := range requiredEnvVars {
+	for i, envVar := range requiredEnvVars {
 		if value, exists := os.LookupEnv(envVar); !exists || value == "" {
-			return fmt.Errorf("missing environment variable: %s", envVar)
+			return nil, fmt.Errorf("missing environment variable: %s", envVar)
+		} else {
+			envVarValues[i] = value
 		}
 	}
 
-	return nil
+	fmt.Println("All environment variables are present.")
+	return envVarValues, nil
 }
 
 // Create a GitHub client using the provided token
