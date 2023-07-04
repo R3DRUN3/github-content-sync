@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	fmt.Println("\n#################### [GITHUB CONTENT SYNC] ####################")
 	envVars, err := getEnvVariables()
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -42,6 +43,7 @@ func main() {
 	fmt.Println("\n\n[Files present in both", folder1, "and", folder2, "with newer commits in", folder1, "====>]")
 	// Print files present in both folder1 and folder2 with newer commits in folder1
 	printFilesSorted(newerFiles)
+	fmt.Println("\n###############################################################")
 }
 
 // Check if all required environment variables are set and return the list of values
