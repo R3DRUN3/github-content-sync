@@ -10,7 +10,8 @@ It helps identify files that are present in one folder but not in another, as we
 ## Purpose
 
 The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
-This was specifically meant for those repo that contain documentation in various languages (divided into different folders) and you need a fast way to know the deltas.  
+This was specifically meant for those repo that contain documentation in various languages (divided into different folders) and you need a fast way to know the deltas:  
+In this case, usually the reference folder and "*source of truth*" is the "*english*" one (for an example take a look at [this repo](https://github.com/cncf/glossary/tree/main/content)).  
 Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
 ## Arguments
 
@@ -41,7 +42,7 @@ export REPO_FOLDER_1=content/en
 export REPO_FOLDER_2=content/it
 export GITHUB_TOKEN=your-github-token
 
-go run main.go
+./github-content-sync
 ```
 
 
