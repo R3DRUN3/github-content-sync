@@ -32,7 +32,7 @@ func main() {
 
 	// Create a GitHub client with the provided token
 	client := createGitHubClient(token)
-
+	fmt.Println("[ TARGET REPO URL: ", repoURL, "]")
 	fmt.Println("\n[ FILES PRESENT IN", folder1, "BUT NOT IN", folder2, "]")
 	// Compare folders and get files present in folder1 but not in folder2
 	diffFiles, newerFiles, err := compareFolders(client, repoURL, folder1, folder2)
