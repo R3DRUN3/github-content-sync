@@ -38,7 +38,7 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
           echo "REPO_FOLDER_1=en" >> $GITHUB_ENV
           echo "REPO_FOLDER_2=it" >> $GITHUB_ENV
           echo "REPO_URL=https://github.com/r3drun3/content-sync-tester" >> $GITHUB_ENV
@@ -47,7 +47,7 @@ jobs:
       - name: Execute Go Script
         run: go run main.go
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
           REPO_FOLDER_1: ${{ env.REPO_FOLDER_1 }}
           REPO_FOLDER_2: ${{ env.REPO_FOLDER_2 }}
           REPO_URL: ${{ env.REPO_URL }}

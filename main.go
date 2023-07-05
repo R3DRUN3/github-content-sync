@@ -60,7 +60,7 @@ func main() {
 
 // Check if all required environment variables are set and return the list of values
 func getEnvVariables() ([]string, error) {
-	requiredEnvVars := []string{"REPO_URL", "REPO_FOLDER_1", "REPO_FOLDER_2", "GITHUB_TOKEN"}
+	requiredEnvVars := []string{"REPO_URL", "REPO_FOLDER_1", "REPO_FOLDER_2", "TOKEN"}
 	envVarValues := make([]string, len(requiredEnvVars))
 
 	for i, envVar := range requiredEnvVars {
