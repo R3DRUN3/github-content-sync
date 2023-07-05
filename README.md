@@ -6,21 +6,23 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/r3drun3/github-content-sync)](https://goreportcard.com/report/github.com/r3drun3/github-content-sync)  
 
-The *Github Content Sync* tool is a command-line script written in *Go* that allows you to compare the contents of two folders within a GitHub repository.  
-It helps identify files that are present in one folder but not in another, as well as files that have newer commits in one folder compared to another.  
+The *Github Content Sync* tool is a command-line script written in *Go* that allows you to compare the contents of *two folders* within a GitHub repository.  
+It helps identify files that are present in the first folder but not in the second, as well as files that have newer commits in the first folder compared to the second one.  
 ## Purpose
 
 The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
 This was specifically meant for those repo that contain documentation in various languages (divided into different folders) and you need a fast way to know the deltas:  
-In this case, usually the reference folder and "*source of truth*" is the "*english*" one (for an example take a look at [this repo](https://github.com/cncf/glossary/tree/main/content)).  
+In this case, usually the reference folder and "*source of truth*" is the "*english*" one (for a real world example take a look at [this repo](https://github.com/cncf/glossary/tree/main/content), for a test playground we use [this one](https://github.com/R3DRUN3/content-sync-tester)).  
 Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
 ## Arguments
 
 The script requires the following environment variables to be set: 
-- `REPO_URL`: The URL of the GitHub repository to analyze. 
-- `REPO_FOLDER_1`: The name of the first folder to compare. 
-- `REPO_FOLDER_2`: The name of the second folder to compare. 
-- `GITHUB_TOKEN`: An access token with appropriate permissions to access the repository.
+- `REPO_URL`: The URL of the GitHub repository to analyze. [MANDATORY]
+- `REPO_FOLDER_1`: The name of the first folder to compare. [MANDATORY]
+- `REPO_FOLDER_2`: The name of the second folder to compare. [MANDATORY]
+- `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
+- `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "synchronization issue" on the target repo, specifying the folder differences. [OPTIONAL]  
+The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/8).
 ## How it works
 
 The script performs the following steps:
@@ -31,17 +33,20 @@ The script performs the following steps:
 1. Retrieves files that exist in both folders and have newer commits in the first folder.
 1. Prints the files that are present in the first folder but not in the second folder.
 1. Prints the files with newer commits in the first folder compared to the same files in the second folder.
+1. If `OPEN_ISSUE` env var is present and set to `true`, opens a "synchronization issue" on the target repo.  
 ## Examples
 
-Here are some examples of how to use the Folder Comparison Tool:
-1. Compare two folders within a GitHub repository:
+You can run this utility in many ways:  
+
+## As an Executable
+Download the latest version and run it:
 
 ```shell
 
-export REPO_URL=https://github.com/cncf/glossary
-export REPO_FOLDER_1=content/en
-export REPO_FOLDER_2=content/it
-export GITHUB_TOKEN=your-github-token
+export REPO_URL=https://github.com/R3DRUN3/content-sync-tester
+export REPO_FOLDER_1=en
+export REPO_FOLDER_2=it
+export TOKEN=your-github-token
 
 ./github-content-sync
 ```
@@ -55,85 +60,17 @@ Output:
 |__,'/_/  /_/   /_n_/  \_,'  /___,'   |__/ |_,' /_/|_/  /_/   /___/ /_/|_/  /_/     /___,' /_/    /_/|_/  |__/
 
 [ ALL ENVIRONMENT VARIABLES ARE CONFIGURED ]
+[ TARGET REPO URL:  https://github.com/R3DRUN3/content-sync-tester ]
 
-[ FILES PRESENT IN content/en BUT NOT IN content/it ]
-_TEMPLATE.md
-application-programming-interface.md
-auto-scaling.md
-bare-metal-machine.md
-blue-green-deployment.md
-chaos-engineering.md
-cloud-computing.md
-cloud-native-apps.md
-cloud-native-security.md
-container-image.md
-container-orchestration.md
-container.md
-continuous-delivery.md
-continuous-deployment.md
-continuous-integration.md
-contributor-ladder
-data-center.md
-database-as-a-service.md
-digital-certificate.md
-distributed-systems.md
-edge-computing.md
-event-streaming.md
-function-as-a-service.md
-gitops.md
-horizontal-scaling.md
-hypervisor.md
-kubernetes.md
-load-balancer.md
-microservices-architecture.md
-mutual-transport-layer-security.md
-pod.md
-policy-as-code.md
-role-based-access-control.md
-serverless.md
-service-discovery.md
-service-proxy.md
-stateless-apps.md
-transport-layer-security.md
-vertical-scaling.md
-virtualization.md
-zero-trust-architecture.md
+[ FILES PRESENT IN en BUT NOT IN it ]
+not_present_in_it.md
+not_present_in_it_2.md
+test.md
 
 
-[ FILES PRESENT IN BOTH content/en AND content/it WITH NEWER COMMITS IN content/en ]
-_index.md
-abstraction.md
-agile-software-development.md
-canary-deployment.md
-client-server-architecture.md
-cluster.md
-containers-as-a-service.md
-contribute
-debugging.md
-devsecops.md
-distributed-apps.md
-event-driven-architecture.md
-firewall.md
-idempotence.md
-infrastructure-as-code.md
-loosely-coupled-architecture.md
-managed-services.md
-monolithic-apps.md
-multitenancy.md
-nodes.md
-observability.md
-platform-as-a-service.md
-portability.md
-reliability.md
-scalability.md
-self-healing.md
-service.md
-site-reliability-engineering.md
-software-as-a-service.md
-style-guide
-tightly-coupled-architectures.md
-version-control.md
-virtual-machine.md
+[ FILES PRESENT IN BOTH en AND it WITH NEWER COMMITS IN en ]
+doc2.md
+last.md
 
 
  ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___
@@ -149,7 +86,7 @@ docker build -t github-content-sync:latest .
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> github-content-sync:latest
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-token-here> github-content-sync:latest
 ```  
 
 
@@ -157,16 +94,16 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 Alternatively, this repo already contains an action to publish the script's OCI image to [Github Packages](https://github.com/features/packages).  
 Pull the version that you want: 
 ```console
-docker pull ghcr.io/r3drun3/github-content-sync:1.1.7 
+docker pull ghcr.io/r3drun3/github-content-sync:1.2.0 
 ```  
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.1.7
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.2.0
 ```  
 
 ## Run via Github Action
-This script is also executed inside a  *Github action*, you can configure this via the `goaction.yaml`  manifest.  
+This script can also executed inside a  *Github action*, for an example take a look at the `Execute Go Script` step inside the `goaction.yaml`  manifest.  
 
 
 ## License
