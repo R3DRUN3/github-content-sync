@@ -1,3 +1,4 @@
+name: goaction
 on:
   #schedule:
     #- cron: '0 0 */15 * *' # uncomment this schedule to run at midnight every 15 day of every months
