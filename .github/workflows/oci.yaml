@@ -9,6 +9,7 @@ jobs:
   build-and-publish-oci:
     runs-on: ubuntu-latest
     permissions: write-all
+    needs: lint
 
     steps:
       - name: Checkout Repository
