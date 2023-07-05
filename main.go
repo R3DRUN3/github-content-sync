@@ -1,7 +1,6 @@
 package main
 
 import (
-	// Standard library packages
 	"context"
 	"fmt"
 	"log"
@@ -9,15 +8,14 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"time"
 
-	// Third-party packages
 	"github.com/common-nighthawk/go-figure"
 	"github.com/google/go-github/v53/github"
 	"golang.org/x/oauth2"
 )
 
 func main() {
-	//fmt.Println("\n#################### [GITHUB CONTENT SYNC] ####################")
 	header := figure.NewFigure("GITHUB CONTENT SYNC", "eftitalic", true)
 	header.Print()
 	envVars, err := getEnvVariables()
@@ -46,6 +44,15 @@ func main() {
 	fmt.Println("\n\n[ FILES PRESENT IN BOTH", folder1, "AND", folder2, "WITH NEWER COMMITS IN", folder1, "]")
 	// Print files present in both folder1 and folder2 with newer commits in folder1
 	printFilesSorted(newerFiles)
+
+	// Open an issue if OPEN_ISSUE env var is set to true
+	if os.Getenv("OPEN_ISSUE") == "true" {
+		err := openSyncIssue(client, repoURL, folder1, folder2, diffFiles, newerFiles)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	footer := figure.NewFigure("----------------------------", "eftitalic", true)
 	footer.Print()
 	fmt.Println()
@@ -177,4 +184,39 @@ func printFilesSorted(files []*github.RepositoryContent) {
 	for _, file := range files {
 		fmt.Println(*file.Name)
 	}
+}
+
+// Open a synchronization issue on GitHub repository
+// Open a synchronization issue on GitHub repository
+func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diffFiles, newerFiles []*github.RepositoryContent) error {
+	owner, repo := parseRepoURL(repoURL)
+
+	// Generate timestamp
+	timestamp := time.Now().Format("2006-01-02 15:04:05")
+	issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
+	issueBody := "## Synchronization Issue\n\n" +
+		"Folder1: " + folder1 + "\n\n" +
+		"Folder2: " + folder2 + "\n\n" +
+		"### Files present in " + folder1 + " but not in " + folder2 + "\n"
+	for _, file := range diffFiles {
+		issueBody += "- " + *file.Name + "\n"
+	}
+
+	issueBody += "\n### Files present in both " + folder1 + " and " + folder2 + " with newer commits in " + folder1 + "\n"
+	for _, file := range newerFiles {
+		issueBody += "- " + *file.Name + "\n"
+	}
+
+	issueRequest := &github.IssueRequest{
+		Title: &issueTitle,
+		Body:  &issueBody,
+	}
+
+	_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
+	return nil
 }
