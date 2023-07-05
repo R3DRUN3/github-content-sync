@@ -1,5 +1,5 @@
 # GITHUB CONTENT SYNC 🔎 📁
-[![lint](https://github.com/R3DRUN3/github-content-sync/actions/workflows/lint.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/lint.yaml)
+[![goaction](https://github.com/R3DRUN3/github-content-sync/actions/workflows/goaction.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/goaction.yaml)
 [![goreleaser](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml)
 [![oci](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml)
 [![Latest Release](https://img.shields.io/github/release/R3DRUN3/github-content-sync.svg)](https://github.com/R3DRUN3/github-content-sync/releases/latest)
