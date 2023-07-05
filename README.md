@@ -165,9 +165,8 @@ Run the docker container (change env vars accordingly):
 docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e GITHUB_TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.1.7
 ```  
 
-## Next Steps
-It can be useful to translate this script into a custom *Github action*.  
-The action will be scheduled by a *chronjob*, compares the folders and open an issue with the report containing the differences.  
+## Run via Github Action
+This script is also executed inside a  *Github action*, you can configure this via the `goaction.yaml`  manifest.  
 
 
 ## License
