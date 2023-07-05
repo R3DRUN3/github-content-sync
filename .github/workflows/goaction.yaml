@@ -1,14 +1,15 @@
 name: goaction
+
 on:
   #schedule:
     #- cron: '0 0 */15 * *' # uncomment this schedule to run at midnight every 15 day of every months
   push:
-  paths:
-    - '**'
-    - '!README.md'
-    - '!**/.gitignore'
-    - '!**/Dockerfile'
-    - '!**/LICENSE'
+    paths:
+      - '**'
+      - '!README.md'
+      - '!**/.gitignore'
+      - '!**/Dockerfile'
+      - '!**/LICENSE'
 
 jobs:
   goaction:
