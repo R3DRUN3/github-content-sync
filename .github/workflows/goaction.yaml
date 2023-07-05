@@ -12,23 +12,37 @@ on:
       - '!**/LICENSE'
 
 jobs:
-  goaction:
+  lint-and-goaction:
     runs-on: ubuntu-latest
     permissions: write-all
-    needs: lint
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.20'
+
+      - name: Lint Go Code
+        run: go vet ./...
+
       - name: Check out repository
         uses: actions/checkout@v3
+
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version: '1.20'
+
       - name: Set up environment variables
         run: |
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "REPO_FOLDER_1=content/en" >> $GITHUB_ENV
           echo "REPO_FOLDER_2=content/it" >> $GITHUB_ENV
           echo "REPO_URL=https://github.com/cncf/glossary" >> $GITHUB_ENV
+
       - name: Execute Go Script
         run: go run main.go
         env:
