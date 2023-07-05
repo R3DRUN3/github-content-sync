@@ -11,7 +11,7 @@ It helps identify files that are present in the first folder but not in the seco
 ## Purpose
 
 The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
-This was specifically meant for those repo that contain documentation in various languages (divided into different folders) and you need a fast way to know the deltas:  
+**This was specifically meant for those repo that contain documentation in various languages** (divided into different folders) and you need a fast way to know the deltas:  
 In this case, usually the reference folder and "*source of truth*" is the "*english*" one (for a real world example take a look at [this repo](https://github.com/cncf/glossary/tree/main/content), for a test playground we use [this one](https://github.com/R3DRUN3/content-sync-tester)).  
 Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
 ## Arguments
@@ -21,7 +21,7 @@ The script requires the following environment variables to be set:
 - `REPO_FOLDER_1`: The name of the first folder to compare. [MANDATORY]
 - `REPO_FOLDER_2`: The name of the second folder to compare. [MANDATORY]
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
-- `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "synchronization issue" on the target repo, specifying the folder differences. [OPTIONAL]  
+- `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
 The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/8).
 ## How it works
 
@@ -38,7 +38,7 @@ The script performs the following steps:
 
 You can run this utility in many ways:  
 
-## As an Executable
+### As an Executable
 Download the latest version and run it:
 
 ```shell
@@ -77,7 +77,7 @@ last.md
 /__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__//__/
 ```  
 
-## With Docker (Local Build)
+### With Docker (Local Build)
 This repo also contain a Dockerfile so you can launch the script as a docker container.  
 buil the image:  
 ```console
@@ -90,7 +90,7 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 ```  
 
 
-## With Docker (Github Packages)
+### With Docker (Github Packages)
 Alternatively, this repo already contains an action to publish the script's OCI image to [Github Packages](https://github.com/features/packages).  
 Pull the version that you want: 
 ```console
@@ -102,8 +102,12 @@ Run the docker container (change env vars accordingly):
 docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.2.0
 ```  
 
-## Run via Github Action
-This script can also executed inside a  *Github action*, for an example take a look at the `Execute Go Script` step inside the `goaction.yaml`  manifest.  
+### Run via Github Action
+The script in this repo can also executed inside a  *Github action*, for an example take a look at the `Execute Go Script` step inside the `goaction.yaml`  manifest.  
+
+### Improvements and Next Steps
+
+- It can be useful to maybe add the possibility of comparing multiple folders at the same time, not just 2.
 
 
 ## License
