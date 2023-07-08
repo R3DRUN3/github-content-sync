@@ -105,7 +105,35 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 ### Run via Github Action
 The script in this repo can also executed inside a  *Github action*, for an example take a look at the `Execute Go Script` step inside the `goaction.yaml`  manifest.  
 
-### Improvements and Next Steps
+
+## Development and Debug
+For development and debug I suggest the use of the [VS Code](https://code.visualstudio.com/) IDE.  
+In order to debug the script locally, you can create the `.vscode/launch.json` file with the following structure:  
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch",
+        "type": "go",
+        "request": "launch",
+        "mode": "auto",
+        "program": "${workspaceFolder}/main.go",
+        "env": {
+            "REPO_URL": "<your-github-repo-target-url>",
+            "REPO_FOLDER_1": "<path-of-the-reference-folder-inside-target-repo>",
+            "REPO_FOLDER_2": "<path-of-the-folder-to-compare-to-the-reference>",
+            "TOKEN": "<your-github-token>",
+            "OPEN_ISSUE": "false"
+        }
+      }
+    ]
+  }
+```  
+
+
+
+## Improvements and Next Steps
 
 - It can be useful to maybe add the possibility of comparing multiple folders at the same time, not just 2.
 
