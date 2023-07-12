@@ -123,7 +123,7 @@ In order to debug the script locally, you can create the `.vscode/launch.json` f
             "REPO_URL": "<your-github-repo-target-url>",
             "REPO_FOLDER_1": "<path-of-the-reference-folder-inside-target-repo>",
             "REPO_FOLDER_2": "<path-of-the-folder-to-compare-to-the-reference>",
-            "TOKEN": "<your-github-token>",
+            "TOKEN": "<your-github-token-here>",
             "OPEN_ISSUE": "false"
         }
       }
