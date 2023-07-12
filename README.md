@@ -99,12 +99,12 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 Alternatively, this repo already contains an action to publish the script's OCI image to [Github Packages](https://github.com/features/packages).  
 Pull the version that you want: 
 ```console
-docker pull ghcr.io/r3drun3/github-content-sync:1.2.0 
+docker pull ghcr.io/r3drun3/github-content-sync:1.3.0 
 ```  
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-github-token-here> ghcr.io/r3drun3/github-content-sync:1.2.0
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-github-token-here> ghcr.io/r3drun3/github-content-sync:1.3.0
 ```  
 
 ### Run via Github Action
