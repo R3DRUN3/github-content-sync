@@ -16,10 +16,10 @@ In this case, usually the reference folder and "*source of truth*" is the "*engl
 Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
 ## Arguments
 
-The script requires the following environment variables to be set: 
+The script requires the following environment variables to be set:
 - `REPO_URL`: The URL of the GitHub repository to analyze. [MANDATORY]
-- `REPO_FOLDER_1`: The name of the first folder to compare. [MANDATORY]
-- `REPO_FOLDER_2`: The name of the second folder to compare. [MANDATORY]
+- `REPO_FOLDER_1`: The name of the reference folder (source of truth). [MANDATORY]
+- `REPO_FOLDER_2`: The name of the second folder to compare to the reference folder. [MANDATORY]
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
 - `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
 The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/8).
