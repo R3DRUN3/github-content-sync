@@ -46,7 +46,7 @@ Download the latest version and run it:
 export REPO_URL=https://github.com/R3DRUN3/content-sync-tester
 export REPO_FOLDER_1=en
 export REPO_FOLDER_2=it
-export TOKEN=your-github-token
+export TOKEN=<your-github-token-here>
 
 ./github-content-sync
 ```
@@ -86,7 +86,7 @@ docker build -t github-content-sync:latest .
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-token-here> github-content-sync:latest
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-github-token-here> github-content-sync:latest
 ```  
 
 
@@ -99,7 +99,7 @@ docker pull ghcr.io/r3drun3/github-content-sync:1.2.0
 
 Run the docker container (change env vars accordingly):  
 ```console
-docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-token-here> ghcr.io/r3drun3/github-content-sync:1.2.0
+docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_1=content/en -e REPO_FOLDER_2=content/it -e TOKEN=<your-github-token-here> ghcr.io/r3drun3/github-content-sync:1.2.0
 ```  
 
 ### Run via Github Action
