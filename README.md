@@ -23,6 +23,11 @@ The script requires the following environment variables to be set:
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
 - `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
 The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/8).
+- `MULTIPLE_ISSUES`: If `OPEN_ISSUE` is set to `true` and this var is also set to `true`, the script will create multiple issues, one for every file difference. [OPTIONAL]  
+> **Warning**
+> Be careful when setting the `MULTIPLE_ISSUES` var to true: if you execute this script against two folders with many files, it will create many issues on your target repo.  
+
+
 ## How it works
 
 The script performs the following steps:
@@ -124,7 +129,8 @@ In order to debug the script locally, you can create the `.vscode/launch.json` f
             "REPO_FOLDER_1": "<path-of-the-reference-folder-inside-target-repo>",
             "REPO_FOLDER_2": "<path-of-the-folder-to-compare-to-the-reference>",
             "TOKEN": "<your-github-token-here>",
-            "OPEN_ISSUE": "false"
+            "OPEN_ISSUE": "false",
+            "MULTIPLE_ISSUES": "false"
         }
       }
     ]

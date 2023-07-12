@@ -187,36 +187,75 @@ func printFilesSorted(files []*github.RepositoryContent) {
 }
 
 // Open a synchronization issue on GitHub repository
-// Open a synchronization issue on GitHub repository
 func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diffFiles, newerFiles []*github.RepositoryContent) error {
 	owner, repo := parseRepoURL(repoURL)
+	// Check if  need to create multiple issues
+	if os.Getenv("MULTIPLE_ISSUES") == "true" {
+		for _, file := range diffFiles {
+			timestamp := time.Now().Format("2006-01-02 15:04:05")
+			issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
+			issueBody := "## Synchronization Issue\n\n" +
+				"Folder1: " + folder1 + "\n\n" +
+				"Folder2: " + folder2 + "\n\n" +
+				"### Files present in " + folder1 + " but not in " + folder2 + "\n"
+			issueBody += "- " + *file.Name + "\n"
+			issueRequest := &github.IssueRequest{
+				Title: &issueTitle,
+				Body:  &issueBody,
+			}
+			_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
+			if err != nil {
+				return err
+			}
+			fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
+		}
+		for _, file := range newerFiles {
+			timestamp := time.Now().Format("2006-01-02 15:04:05")
+			issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
+			issueBody := "## Synchronization Issue\n\n" +
+				"Folder1: " + folder1 + "\n\n" +
+				"Folder2: " + folder2 + "\n\n" +
+				"### Files present in both " + folder1 + " and " + folder2 + " with newer commits in " + folder1 + "\n"
+			issueBody += "- " + *file.Name + "\n"
+			issueRequest := &github.IssueRequest{
+				Title: &issueTitle,
+				Body:  &issueBody,
+			}
+			_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
+			if err != nil {
+				return err
+			}
+			fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
+		}
+	} else { // create a single issue
+		// Generate timestamp
+		timestamp := time.Now().Format("2006-01-02 15:04:05")
+		issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
+		issueBody := "## Synchronization Issue\n\n" +
+			"Folder1: " + folder1 + "\n\n" +
+			"Folder2: " + folder2 + "\n\n" +
+			"### Files present in " + folder1 + " but not in " + folder2 + "\n"
+		for _, file := range diffFiles {
+			issueBody += "- " + *file.Name + "\n"
+		}
 
-	// Generate timestamp
-	timestamp := time.Now().Format("2006-01-02 15:04:05")
-	issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
-	issueBody := "## Synchronization Issue\n\n" +
-		"Folder1: " + folder1 + "\n\n" +
-		"Folder2: " + folder2 + "\n\n" +
-		"### Files present in " + folder1 + " but not in " + folder2 + "\n"
-	for _, file := range diffFiles {
-		issueBody += "- " + *file.Name + "\n"
+		issueBody += "\n### Files present in both " + folder1 + " and " + folder2 + " with newer commits in " + folder1 + "\n"
+		for _, file := range newerFiles {
+			issueBody += "- " + *file.Name + "\n"
+		}
+
+		issueRequest := &github.IssueRequest{
+			Title: &issueTitle,
+			Body:  &issueBody,
+		}
+
+		_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
+		return nil
 	}
-
-	issueBody += "\n### Files present in both " + folder1 + " and " + folder2 + " with newer commits in " + folder1 + "\n"
-	for _, file := range newerFiles {
-		issueBody += "- " + *file.Name + "\n"
-	}
-
-	issueRequest := &github.IssueRequest{
-		Title: &issueTitle,
-		Body:  &issueBody,
-	}
-
-	_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
 	return nil
 }
