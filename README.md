@@ -146,7 +146,7 @@ In order to debug the script locally, you can create the `.vscode/launch.json` f
 
 ## License
 
-This script is released under the [MIT License](https://chat.openai.com/LICENSE).  
+This script is released under the [MIT License](https://opensource.org/license/mit/).  
 Feel free to modify and distribute it as per your needs.  
 
 
