@@ -44,7 +44,7 @@ The script performs the following steps:
 You can run this utility in many ways:  
 
 ### As an Executable
-Download the latest version and run it:
+Download the [release](https://github.com/R3DRUN3/github-content-sync/releases/) that you want and run it:
 
 ```shell
 
@@ -84,9 +84,11 @@ last.md
 
 ### With Docker (Local Build)
 This repo also contain a Dockerfile so you can launch the script as a docker container.  
-buil the image:  
+Clone the repo locally and buil the image:  
 ```console
-docker build -t github-content-sync:latest .
+git clone https://github.com/r3drun3/github-content-sync \
+&& cd github-content-sync \
+&& docker build -t github-content-sync:latest .
 ```  
 
 Run the docker container (change env vars accordingly):  
