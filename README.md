@@ -108,7 +108,7 @@ docker run -it --rm -e REPO_URL=https://github.com/cncf/glossary -e REPO_FOLDER_
 ```  
 
 ### Run via Github Action
-The script in this repo can also executed inside a  *Github action*, for an example take a look at the `Execute Go Script` step inside the `goaction.yaml`  manifest.  
+The script in this repo can also executed inside a  *Github action*, for an example take a look at the [goaction](https://github.com/R3DRUN3/github-content-sync/actions/workflows/goaction.yaml)  Github Action associated to this repo.  
 
 
 ## Development and Debug
