@@ -51,7 +51,7 @@ func main() {
 
 	// Open an issue if OPEN_ISSUE env var is set to true
 	if os.Getenv("OPEN_ISSUE") == "true" {
-		err := openSyncIssue(client, repoURL, folder1, folder2, diffFiles, newerFiles)
+		err := openSyncIssue(client, repoURL, folder1, folder2, diffFiles, diffFilesFolder2, newerFiles)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -208,7 +208,7 @@ func printFilesSorted(files []*github.RepositoryContent) {
 }
 
 // Open a synchronization issue on GitHub repository
-func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diffFiles, newerFiles []*github.RepositoryContent) error {
+func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diffFiles, diffFilesFolder2, newerFiles []*github.RepositoryContent) error {
 	owner, repo := parseRepoURL(repoURL)
 	// Check if  need to create multiple issues
 	if os.Getenv("MULTIPLE_ISSUES") == "true" {
@@ -248,6 +248,24 @@ func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diff
 			}
 			fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
 		}
+		for _, file := range diffFilesFolder2 {
+			timestamp := time.Now().Format("2006-01-02 15:04:05")
+			issueTitle := "Synchronization Issue [" + timestamp + "]: " + folder1 + " vs " + folder2
+			issueBody := "## Synchronization Issue\n\n" +
+				"Folder1: " + folder1 + "\n\n" +
+				"Folder2: " + folder2 + "\n\n" +
+				"### Files present in " + folder2 + " but not in " + folder1 + "\n"
+			issueBody += "- " + *file.Name + "\n"
+			issueRequest := &github.IssueRequest{
+				Title: &issueTitle,
+				Body:  &issueBody,
+			}
+			_, _, err := client.Issues.Create(context.Background(), owner, repo, issueRequest)
+			if err != nil {
+				return err
+			}
+			fmt.Println("\n[ SYNCHRONIZATION ISSUE OPENED ]")
+		}
 	} else { // create a single issue
 		// Generate timestamp
 		timestamp := time.Now().Format("2006-01-02 15:04:05")
@@ -262,6 +280,11 @@ func openSyncIssue(client *github.Client, repoURL, folder1, folder2 string, diff
 
 		issueBody += "\n### Files present in both " + folder1 + " and " + folder2 + " with newer commits in " + folder1 + "\n"
 		for _, file := range newerFiles {
+			issueBody += "- " + *file.Name + "\n"
+		}
+
+		issueBody += "\n### Files present in " + folder2 + " but not in " + folder1 + "\n"
+		for _, file := range diffFilesFolder2 {
 			issueBody += "- " + *file.Name + "\n"
 		}
 
