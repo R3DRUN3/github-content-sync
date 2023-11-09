@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("[ TARGET REPO URL: ", repoURL, "]")
 	fmt.Println("\n[ FILES PRESENT IN", folder1, "BUT NOT IN", folder2, "]")
 	// Compare folders and get files present in folder1 but not in folder2
-	diffFiles, newerFiles, err := compareFolders(client, repoURL, folder1, folder2)
+	diffFiles, newerFiles, diffFilesFolder2, err := compareFolders(client, repoURL, folder1, folder2)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,6 +44,10 @@ func main() {
 	fmt.Println("\n\n[ FILES PRESENT IN BOTH", folder1, "AND", folder2, "WITH NEWER COMMITS IN", folder1, "]")
 	// Print files present in both folder1 and folder2 with newer commits in folder1
 	printFilesSorted(newerFiles)
+
+	fmt.Println("\n\n[ FILES PRESENT IN", folder2, "BUT NOT IN", folder1, "]")
+	// Print files present in folder2 but not in folder1
+	printFilesSorted(diffFilesFolder2)
 
 	// Open an issue if OPEN_ISSUE env var is set to true
 	if os.Getenv("OPEN_ISSUE") == "true" {
@@ -86,22 +90,25 @@ func createGitHubClient(token string) *github.Client {
 }
 
 // Compare folders and get files present in folder1 but not in folder2, and files with newer commits in folder1
-func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]*github.RepositoryContent, []*github.RepositoryContent, error) {
+// Compare folders and get files present in folder1 but not in folder2,
+// files with newer commits in folder1, and files present in folder2 but not in folder1
+func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]*github.RepositoryContent, []*github.RepositoryContent, []*github.RepositoryContent, error) {
 	owner, repo := parseRepoURL(repoURL)
 
 	// Get contents of folder1 and folder2 from the GitHub repository
 	folder1Files, err := getFolderContents(client, owner, repo, folder1)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	folder2Files, err := getFolderContents(client, owner, repo, folder2)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
-	diffFiles := make([]*github.RepositoryContent, 0)
+	diffFilesFolder1 := make([]*github.RepositoryContent, 0)
 	newerFiles := make([]*github.RepositoryContent, 0)
+	diffFilesFolder2 := make([]*github.RepositoryContent, 0)
 
 	var wg sync.WaitGroup
 	wg.Add(len(folder1Files))
@@ -119,7 +126,7 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 				}
 			}
 			if !found {
-				diffFiles = append(diffFiles, file)
+				diffFilesFolder1 = append(diffFilesFolder1, file)
 			} else {
 				commit1, err := getFileLastCommit(client, owner, repo, folder1, *file.Name)
 				if err != nil {
@@ -138,9 +145,23 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 		}(file1)
 	}
 
+	// Compare files in folder2 with files in folder1
+	for _, file2 := range folder2Files {
+		found := false
+		for _, file1 := range folder1Files {
+			if *file2.Name == *file1.Name {
+				found = true
+				break
+			}
+		}
+		if !found {
+			diffFilesFolder2 = append(diffFilesFolder2, file2)
+		}
+	}
+
 	wg.Wait()
 
-	return diffFiles, newerFiles, nil
+	return diffFilesFolder1, newerFiles, diffFilesFolder2, nil
 }
 
 // Get contents of a folder from the GitHub repository
