@@ -22,7 +22,7 @@ The script requires the following environment variables to be set:
 - `REPO_FOLDER_2`: The name of the second folder to compare to the reference folder. [MANDATORY]
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
 - `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
-The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/8).
+The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/29).
 - `MULTIPLE_ISSUES`: If `OPEN_ISSUE` is set to `true` and this var is also set to `true`, the script will create multiple issues, one for every file difference. [OPTIONAL]  
 > **Warning**
 > Be careful when setting the `MULTIPLE_ISSUES` var to true: if you execute this script against two folders with many files, it will create many issues on your target repo.  
@@ -35,10 +35,10 @@ The script performs the following steps:
 1. Creates a GitHub client using the provided access token.
 1. Retrieve the content of the two specified folders via the Github client object.
 1. Compares the contents of the two specified folders within the repository.
-1. Retrieves files that exist in both folders and have newer commits in the first folder.
 1. Prints the files that are present in the first folder but not in the second folder.
 1. Prints the files with newer commits in the first folder compared to the same files in the second folder.
-1. If `OPEN_ISSUE` env var is present and set to `true`, opens a "synchronization issue" on the target repo.  
+1. Prints the files that are present in the second folder but not in the first folder.
+2. If `OPEN_ISSUE` env var is present and set to `true`, opens a "synchronization issue" on the target repo.  
 ## Examples
 
 You can run this utility in many ways:  
