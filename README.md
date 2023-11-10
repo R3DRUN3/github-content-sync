@@ -7,7 +7,16 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/r3drun3/github-content-sync)](https://goreportcard.com/report/github.com/r3drun3/github-content-sync)  
 
 The *Github Content Sync* tool is a command-line script written in *Go* that allows you to compare the contents of *two folders* within a GitHub repository.  
-It helps identify files that are present in the first folder but not in the second, as well as files that have newer commits in the first folder compared to the second one.  
+It helps identify files difference between the two folders.  
+
+<br/>
+
+Basically, if `A` and `B` are the two folders, the tool will output:  
+- files present in `A` but not in `B`
+- files present in `B` but not in `A`
+- files present in both `A` and `B` but with newer commits in `A`  
+
+
 ## Purpose
 
 The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
@@ -18,14 +27,14 @@ Generally, it can be useful in scenarios where you have two folders within a rep
 
 The script requires the following environment variables to be set:
 - `REPO_URL`: The URL of the GitHub repository to analyze. [MANDATORY]
-- `REPO_FOLDER_1`: The name of the reference folder (source of truth). [MANDATORY]
-- `REPO_FOLDER_2`: The name of the second folder to compare to the reference folder. [MANDATORY]
+- `REPO_FOLDER_1`: The name of the reference folder (source of truth, or folder `A`). [MANDATORY]
+- `REPO_FOLDER_2`: The name of the second folder to compare to the reference folder (folder `B`). [MANDATORY]
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
 - `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
 The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/29).
 - `MULTIPLE_ISSUES`: If `OPEN_ISSUE` is set to `true` and this var is also set to `true`, the script will create multiple issues, one for every file difference. [OPTIONAL]  
 > **Warning**
-> Be careful when setting the `MULTIPLE_ISSUES` var to true: if you execute this script against two folders with many files, it will create many issues on your target repo.  
+> Be careful when setting the `MULTIPLE_ISSUES` var to *true*: if you execute this script against two folders with many files, it will create many issues on your target repo.  
 
 
 ## How it works
