@@ -44,11 +44,12 @@ jobs:
           echo "REPO_URL=https://github.com/r3drun3/content-sync-tester" >> $GITHUB_ENV
           echo "OPEN_ISSUE=true" >> $GITHUB_ENV
 
-      - name: Execute Go Script
-        run: go run main.go
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          REPO_FOLDER_1: ${{ env.REPO_FOLDER_1 }}
-          REPO_FOLDER_2: ${{ env.REPO_FOLDER_2 }}
-          REPO_URL: ${{ env.REPO_URL }}
-          OPEN_ISSUE: ${{ env.OPEN_ISSUE }}
+      # uncomment the following to execute guthub-content-sync inside the CI pipeline
+      # - name: Execute Go Script
+      #   run: go run main.go
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      #     REPO_FOLDER_1: ${{ env.REPO_FOLDER_1 }}
+      #     REPO_FOLDER_2: ${{ env.REPO_FOLDER_2 }}
+      #     REPO_URL: ${{ env.REPO_URL }}
+      #     OPEN_ISSUE: ${{ env.OPEN_ISSUE }}
