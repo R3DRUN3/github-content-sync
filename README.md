@@ -35,7 +35,7 @@ The opened issues are structured like [this one](https://github.com/R3DRUN3/cont
 - `MULTIPLE_ISSUES`: If `OPEN_ISSUE` is set to `true` and this var is also set to `true`, the script will create multiple issues, one for every file difference. [OPTIONAL]  
 
 
-> **Warning**  
+> [!WARNING]  
 > Be careful when setting the `MULTIPLE_ISSUES` var to *true*: if you execute this script against two folders with many files, it will create many issues on your target repo.  
 
 
