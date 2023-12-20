@@ -19,7 +19,8 @@ Basically, if `A` and `B` are the two folders, the tool will output:
 
 ## Purpose
 
-The purpose of this tool is to facilitate the comparison of folder contents within a GitHub repository.  
+This tool has been specifically developed to assist the *Special Interest Groups (SIGs)* responsible for *glossary* management within the [CNCF](https://github.com/cncf).  
+The purpose of the tool is to facilitate the comparison of folder contents within a GitHub repository.  
 **This was specifically meant for those repo that contain documentation in various languages** (divided into different folders) and you need a fast way to know the deltas:  
 In this case, usually the reference folder and "*source of truth*" is the "*english*" one (for a real world example take a look at [this repo](https://github.com/cncf/glossary/tree/main/content), for a test playground we use [this one](https://github.com/R3DRUN3/content-sync-tester)).  
 Generally, it can be useful in scenarios where you have two folders within a repository and you want to identify the differences between them, such as missing files or files with newer commits.  
