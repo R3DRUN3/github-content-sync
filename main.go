@@ -29,13 +29,21 @@ func main() {
 	folder1 := envVars[1]
 	folder2 := envVars[2]
 	token := envVars[3]
+	folder1Branch := os.Getenv("FOLDER_1_BRANCH")
+	if folder1Branch == "" {
+		folder1Branch = "main"
+	}
+	folder2Branch := os.Getenv("FOLDER_2_BRANCH")
+	if folder2Branch == "" {
+		folder2Branch = "main"
+	}
 
 	// Create a GitHub client with the provided token
 	client := createGitHubClient(token)
 	fmt.Println("[ TARGET REPO URL: ", repoURL, "]")
-	fmt.Println("\n[ FILES PRESENT IN", folder1, "BUT NOT IN", folder2, "]")
+	fmt.Println("\n[ FILES PRESENT IN", folder1, "ON BRANCH", folder1Branch, "BUT NOT IN", folder2, "ON BRANCH", folder2Branch, "]")
 	// Compare folders and get files present in folder1 but not in folder2
-	diffFiles, newerFiles, diffFilesFolder2, err := compareFolders(client, repoURL, folder1, folder2)
+	diffFiles, newerFiles, diffFilesFolder2, err := compareFolders(client, repoURL, folder1, folder1Branch, folder2, folder2Branch)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +53,7 @@ func main() {
 	// Print files present in both folder1 and folder2 with newer commits in folder1
 	printFilesSorted(newerFiles)
 
-	fmt.Println("\n\n[ FILES PRESENT IN", folder2, "BUT NOT IN", folder1, "]")
+	fmt.Println("\n\n[ FILES PRESENT IN", folder2, "ON BRANCH", folder2Branch, "BUT NOT IN", folder1, "ON BRANCH", folder1Branch, "]")
 	// Print files present in folder2 but not in folder1
 	printFilesSorted(diffFilesFolder2)
 
@@ -92,16 +100,16 @@ func createGitHubClient(token string) *github.Client {
 // Compare folders and get files present in folder1 but not in folder2, and files with newer commits in folder1
 // Compare folders and get files present in folder1 but not in folder2,
 // files with newer commits in folder1, and files present in folder2 but not in folder1
-func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]*github.RepositoryContent, []*github.RepositoryContent, []*github.RepositoryContent, error) {
+func compareFolders(client *github.Client, repoURL, folder1, folder1Branch, folder2, folder2Branch string) ([]*github.RepositoryContent, []*github.RepositoryContent, []*github.RepositoryContent, error) {
 	owner, repo := parseRepoURL(repoURL)
 
 	// Get contents of folder1 and folder2 from the GitHub repository
-	folder1Files, err := getFolderContents(client, owner, repo, folder1)
+	folder1Files, err := getFolderContents(client, owner, repo, folder1, folder1Branch)
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
-	folder2Files, err := getFolderContents(client, owner, repo, folder2)
+	folder2Files, err := getFolderContents(client, owner, repo, folder2, folder2Branch)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -112,6 +120,8 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 
 	var wg sync.WaitGroup
 	wg.Add(len(folder1Files))
+
+	var mu sync.Mutex // Declare a mutex
 
 	// Compare files in folder1 with files in folder2 concurrently using goroutines
 	for _, file1 := range folder1Files {
@@ -125,15 +135,18 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 					break
 				}
 			}
+
 			if !found {
+				mu.Lock() // Lock the mutex before modifying the slice
 				diffFilesFolder1 = append(diffFilesFolder1, file)
+				mu.Unlock() // Unlock the mutex after modifying the slice
 			} else {
-				commit1, err := getFileLastCommit(client, owner, repo, folder1, *file.Name)
+				commit1, err := getFileLastCommit(client, owner, repo, folder1, folder1Branch, *file.Name)
 				if err != nil {
 					log.Println(err)
 					return
 				}
-				commit2, err := getFileLastCommit(client, owner, repo, folder2, *file.Name)
+				commit2, err := getFileLastCommit(client, owner, repo, folder2, folder2Branch, *file.Name)
 				if err != nil {
 					log.Println(err)
 					return
@@ -165,17 +178,20 @@ func compareFolders(client *github.Client, repoURL, folder1, folder2 string) ([]
 }
 
 // Get contents of a folder from the GitHub repository
-func getFolderContents(client *github.Client, owner, repo, folder string) ([]*github.RepositoryContent, error) {
-	_, files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, folder, nil)
+func getFolderContents(client *github.Client, owner, repo, folder, branch string) ([]*github.RepositoryContent, error) {
+	opt := &github.RepositoryContentGetOptions{
+		Ref: branch,
+	}
+	_, files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, folder, opt)
 	if err != nil {
 		return nil, err
 	}
 	return files, nil
 }
 
-// Get the last commit of a file in a specific path
-func getFileLastCommit(client *github.Client, owner, repo, path, file string) (*github.RepositoryCommit, error) {
-	commits, _, err := client.Repositories.ListCommits(context.Background(), owner, repo, &github.CommitsListOptions{Path: path + "/" + file})
+// Get the last commit of a file in a specific path on a particular branch
+func getFileLastCommit(client *github.Client, owner, repo, path, branch, file string) (*github.RepositoryCommit, error) {
+	commits, _, err := client.Repositories.ListCommits(context.Background(), owner, repo, &github.CommitsListOptions{Path: path + "/" + file, SHA: branch})
 	if err != nil {
 		return nil, err
 	}

@@ -16,6 +16,8 @@ Basically, if `A` and `B` are the two folders, the tool will output:
 - files present in `B` but not in `A`
 - files present in both `A` and `B` but with newer commits in `A`  
 
+> [!NOTE]  
+> You can also do cross-branches comparison by specifing the branches for both directories.  
 
 ## Purpose
 
@@ -31,6 +33,8 @@ The script requires the following environment variables to be set:
 - `REPO_FOLDER_1`: The name of the reference folder (source of truth, or folder `A`). [MANDATORY]
 - `REPO_FOLDER_2`: The name of the second folder to compare to the reference folder (folder `B`). [MANDATORY]
 - `TOKEN`: An access token with appropriate permissions to *read* and *open issues* on the target repo. [MANDATORY]
+- `FOLDER_1_BRANCH`: The branch for the first folder. If not specified, the default is main [OPTIONAL]
+- `FOLDER_2_BRANCH`: The branch for the second folder. If not specified, the default is main [OPTIONAL]
 - `OPEN_ISSUE`: If set to `true`, this specify that the script needs to open a "*synchronization issue*" on the target repo, specifying the folder differences. [OPTIONAL]  
 The opened issues are structured like [this one](https://github.com/R3DRUN3/content-sync-tester/issues/29).
 - `MULTIPLE_ISSUES`: If `OPEN_ISSUE` is set to `true` and this var is also set to `true`, the script will create multiple issues, one for every file difference. [OPTIONAL]  
