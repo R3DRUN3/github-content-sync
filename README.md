@@ -1,7 +1,7 @@
 # GITHUB CONTENT SYNC 🔎 📁
 [![goaction](https://github.com/R3DRUN3/github-content-sync/actions/workflows/goaction.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/goaction.yaml)
 [![goreleaser](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/release.yaml)
-[![oci](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml)
+[![oci](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml/badge.svg)](https://github.com/R3DRUN3/github-content-sync/actions/workflows/oci.yaml)  
 [![Latest Release](https://img.shields.io/github/release/R3DRUN3/github-content-sync.svg)](https://github.com/R3DRUN3/github-content-sync/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Report Card](https://goreportcard.com/badge/github.com/r3drun3/github-content-sync)](https://goreportcard.com/report/github.com/r3drun3/github-content-sync)  
