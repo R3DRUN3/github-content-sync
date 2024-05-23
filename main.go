@@ -186,7 +186,48 @@ func getFolderContents(client *github.Client, owner, repo, folder, branch string
 	if err != nil {
 		return nil, err
 	}
+	// Check if recursive scanning is enabled
+	if recursive, _ := strconv.ParseBool(os.Getenv("RECURSIVE")); recursive {
+		var allFiles []*github.RepositoryContent
+		for _, file := range files {
+			if *file.Type == "dir" {
+				subFiles, err := getFolderContentsRecursive(client, owner, repo, *file.Path, branch)
+				if err != nil {
+					return nil, err
+				}
+				allFiles = append(allFiles, subFiles...)
+			} else {
+				allFiles = append(allFiles, file)
+			}
+		}
+		return allFiles, nil
+	}
 	return files, nil
+}
+
+// Recursive helper function to get contents of a directory
+func getFolderContentsRecursive(client *github.Client, owner, repo, path, branch string) ([]*github.RepositoryContent, error) {
+	opt := &github.RepositoryContentGetOptions{
+		Ref: branch,
+	}
+	_, files, _, err := client.Repositories.GetContents(context.Background(), owner, repo, path, opt)
+	if err != nil {
+		return nil, err
+	}
+
+	var allFiles []*github.RepositoryContent
+	for _, file := range files {
+		if *file.Type == "dir" {
+			subFiles, err := getFolderContentsRecursive(client, owner, repo, *file.Path, branch)
+			if err != nil {
+				return nil, err
+			}
+			allFiles = append(allFiles, subFiles...)
+		} else {
+			allFiles = append(allFiles, file)
+		}
+	}
+	return allFiles, nil
 }
 
 // Get the last commit of a file in a specific path on a particular branch
